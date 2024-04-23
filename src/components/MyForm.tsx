@@ -12,6 +12,11 @@ interface FormData {
   remarks: string;
 }
 
+interface MyFormProps {
+  username: string;
+}
+
+
 const FormContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -32,7 +37,21 @@ const Button = styled.button`
   padding: 0.5rem 1rem;
 `;
 
-const MyForm: React.FC = () => {
+const WorkDetailContainer = styled.div`
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.5rem;
+`;
+
+const RemoveButton = styled.button`
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  margin-left: 0.5rem;
+`;
+
+const MyForm: React.FC<MyFormProps> = ({ username }) => {
   const [formData, setFormData] = useState<FormData>({
     date: '',
     name: '',
@@ -78,6 +97,15 @@ const MyForm: React.FC = () => {
     });
   };
 
+  const handleRemoveWorkDetail = (index: number) => {
+    const newWorkDetails = [...formData.workDetails];
+    newWorkDetails.splice(index, 1);
+    setFormData({
+      ...formData,
+      workDetails: newWorkDetails,
+    });
+  };
+
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log(formData);
@@ -85,6 +113,7 @@ const MyForm: React.FC = () => {
 
   return (
     <FormContainer>
+      <h2>Welcome, {username}!</h2>
       <form onSubmit={handleSubmit}>
         <Input
           type="date"
@@ -113,14 +142,19 @@ const MyForm: React.FC = () => {
             placeholder="End Time"
           />
         </div>
+        
         <div>
           {formData.workDetails.map((detail, index) => (
-            <Textarea
-              key={index}
-              value={detail}
-              onChange={(e) => handleWorkDetailsChange(e, index)}
-              placeholder={`Work Detail ${index + 1}`}
-            />
+            <WorkDetailContainer key={index}>
+              <Textarea
+                value={detail}
+                onChange={(e) => handleWorkDetailsChange(e, index)}
+                placeholder={`Work Detail ${index + 1}`}
+              />
+              <RemoveButton onClick={() => handleRemoveWorkDetail(index)}>
+                ✖️
+              </RemoveButton>
+            </WorkDetailContainer>
           ))}
           <Button type="button" onClick={handleAddWorkDetail}>
             Add Work Detail

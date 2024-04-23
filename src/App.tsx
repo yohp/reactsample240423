@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import LoginForm from './components/LoginForm';
 import MyForm from './components/MyForm';
 import LoadingAnimation from './components/LoadingAnimation';
+import { adminUser } from './utils/user';
 
 const App: React.FC = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -25,7 +26,7 @@ const App: React.FC = () => {
       ) : isLoggedIn ? (
         <MyForm username={username} />
       ) : (
-        <LoginForm onLogin={handleLogin} />
+        <LoginForm onLogin={handleLogin} adminUser={adminUser} />
       )}
     </div>
   );

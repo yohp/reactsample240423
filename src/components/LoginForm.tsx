@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import { User } from '../utils/user';
 
 interface LoginProps {
   onLogin: (isLoggedIn: boolean, enteredUsername: string) => void;
+  adminUser: User;
 }
 
 const LoginContainer = styled.div`
@@ -20,13 +22,13 @@ const Button = styled.button`
   padding: 0.5rem 1rem;
 `;
 
-const LoginForm: React.FC<LoginProps> = ({ onLogin }) => {
+const LoginForm: React.FC<LoginProps> = ({ onLogin, adminUser }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (username === 'admin' && password === 'admin') {
+    if (username === adminUser.username && password === adminUser.password) {
       onLogin(true, username);
     } else {
       alert('Invalid username or password');
